@@ -124,7 +124,12 @@ class ContentLoader {
             \F3::get('logger')->log('start insertion of new item "'.$item->getTitle().'"', \DEBUG);
             
             // sanitize content html
-            $content = $this->sanitizeContent($item->getContent());
+            try {
+                $content = $this->sanitizeContent($item->getContent());
+            } catch(\exception $e) {
+                \F3::get('logger')->log('Can not fetch "'.$item->getTitle().'" : ' . $e->getMessage(), \ERROR);
+                continue;
+            }
 
             // sanitize title
             $title = htmlspecialchars_decode($item->getTitle());
